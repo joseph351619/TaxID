@@ -1,0 +1,36 @@
+public bool CheckInvoice(string invoice)
+        {
+            if (string.IsNullOrEmpty(invoice))
+            { return false; }
+            if (invoice.Length != 10)
+            {
+                return false;
+            }
+            System.Text.RegularExpressions.Regex regexEnglish = new System.Text.RegularExpressions.Regex(@"[A-Za-z]{2}[0-9]{8}");
+            if (!regexEnglish.IsMatch(invoice))
+            {
+                return false;
+            }
+            int[] invoiceRegular = new int[8] { 1, 2, 1, 2, 1, 2, 4, 1 };
+            int invoiceSum = 0;
+            for (int i = 2; i < 10; ++i)
+            {
+                int num = invoiceRegular[i - 2] * int.Parse(invoice[i].ToString());
+                if (num >= 10)
+                {
+                    invoiceSum += num / 10 + num % 10;
+                }
+                else
+                {
+                    invoiceSum += num;
+                }
+            }
+            if (invoiceSum % 10 != 0)
+            {
+                if (invoice[8] != '7' || (invoiceSum + 1) % 10 != 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
